@@ -5,7 +5,7 @@ This is an implementation of a distributed database built from scratch using the
 
 
 ## How to run a sample program
-1. Go to ```main.cpp``` in ```/Application``` Folder
+1. Go to ```main.cpp``` in ```/application``` Folder
 2. Run
 ```shell
     ./main <thisip:thisport> otherip1:otherport1,otherip2:otherport2
