@@ -7,32 +7,21 @@
 
 #pragma once
 
-#include <string>
-#include <vector>
-#include <utility>
+
+#include "option.hpp"
 
 namespace paxosdb {
-typedef unsigned int node_id_t;
 
-class SingleNodeInfo {
-private:
-    node_id_t nodeID;
-    std::string nodeIPAddress;
-    int nodePort;
-    static node_id_t nextNodeID;
+class Node {
+    // this is a node parent class.
 public:
-    SingleNodeInfo() = delete; // default init is not allowed.
-    template <typename T>
-    SingleNodeInfo(T&& ip, const int port)
-        : nodeID(nextNodeID++), nodeIPAddress(std::forward<T>(ip)), nodePort(port) {}
-    [[nodiscard]] node_id_t GetNodeID() const { return nodeID; } // return by value for all primitive types
-    [[nodiscard]] const std::string& GetNodeIPAddress() const { return nodeIPAddress; }
-    [[nodiscard]] int GetNodePort() const { return nodePort; }
+    Node() = default;
+    virtual ~Node() = default;
+
+    // key function 1: we should directly call this function in parent class. It will instantiate a child instance and pass it to the parent pointer (polymorphism)
+    // Things to do here: instantiate a opNode, init the network
+    static int RunNode(const Options &oOptions, Node *& oPNode);
 };
-
-node_id_t SingleNodeInfo::nextNodeID = 0;
-
-typedef std::vector<SingleNodeInfo> NodeInfoList;
 
 }
 
