@@ -14,3 +14,5 @@ For example,
 ```shell
     ./main localhost:1111 localhost:2222,localhost:3333
 ```
+
+## Some system design ideas

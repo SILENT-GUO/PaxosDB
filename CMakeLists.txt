@@ -16,4 +16,9 @@ add_executable(PaxosDBSampleApplication application/main.cpp
         include/network.hpp
         src/network/network.cpp
         src/network/DFNetwork.cpp
-        src/network/DFNetwork.hpp)
+        src/network/DFNetwork.hpp
+        src/network/concurrent.cpp
+        src/network/concurrent.hpp
+        include/NonCopyable.hpp
+        src/network/udp.cpp
+        src/network/udp.hpp)
