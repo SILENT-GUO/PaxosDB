@@ -1,0 +1,3 @@
+/home/zbguo/CLionProjects/paxosDB/build/CMakeFiles/PaxosDBSampleApplication.dir
+/home/zbguo/CLionProjects/paxosDB/build/CMakeFiles/edit_cache.dir
+/home/zbguo/CLionProjects/paxosDB/build/CMakeFiles/rebuild_cache.dir

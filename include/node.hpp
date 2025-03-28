@@ -11,7 +11,6 @@
 #include "option.hpp"
 
 namespace paxosdb {
-
 class Node {
     // this is a node parent class.
 public:
