@@ -1,4 +1,0 @@
-/home/zbguo/.cache/JetBrains/RemoteDev/dist/c0d814f62eb66_CLion-2024.3.4/bin/cmake/linux/x64/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "Unix Makefiles" -S /home/zbguo/CLionProjects/paxosDB -B /home/zbguo/CLionProjects/paxosDB/cmake-build-debug
--- Configuring done (0.0s)
--- Generating done (0.0s)
--- Build files have been written to: /home/zbguo/CLionProjects/paxosDB/cmake-build-debug
