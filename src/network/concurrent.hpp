@@ -18,8 +18,8 @@ namespace paxosdb {
 class Thread: public NonCopyable {
     // this class will be mostly a re-implementation of std::thread.
 public:
-    Thread();
-    virtual ~Thread();
+    Thread() = default;
+    virtual ~Thread() = default;
     void start(); // this function directly call run() method. Similar to the node / pnode scenerio, user can directly use Thread.start() to implement alternative run methods
     void join();
     void detach();

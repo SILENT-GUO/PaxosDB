@@ -4,6 +4,7 @@
 
 #include "concurrent.hpp"
 
+
 static void* threadRun(void* p) {
     auto* thread = static_cast<paxosdb::Thread*>(p);
     thread->run();
@@ -13,7 +14,7 @@ static void* threadRun(void* p) {
 namespace paxosdb {
 
 void Thread::start() {
-    this->m_thread = std::thread(&Thread::run, this);
+    this->m_thread = std::thread([this] { return threadRun(this); });
 }
 
 void Thread::join() {
