@@ -18,6 +18,8 @@ public:
 
     int init(const Options& options, Network *& network);
 
+    int onReceiveMessage(const char* message, size_t message_size) override;
+
 
 
 };

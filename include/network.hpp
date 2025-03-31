@@ -4,11 +4,11 @@
 
 #ifndef NETWORK_HPP
 #define NETWORK_HPP
-
 #pragma once
 namespace paxosdb {
 
 class Node;
+
 class Network {
 public:
     Network();
@@ -16,8 +16,11 @@ public:
 
     virtual void initNetworkThreads() = 0; // call this function before send / recv messages
     virtual void stopNetworkThreads() = 0;
+
+    void onReceiveMessage(const char* message, unsigned int message_size);
 private:
-    Node * oNode;
+    friend class Node;
+    Node * _oNode;
 };
 
 

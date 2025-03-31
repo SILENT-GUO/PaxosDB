@@ -3,8 +3,11 @@
 //
 
 #include <network.hpp>
+
+#include "node.hpp"
+
 namespace paxosdb {
-    Network::Network(): oNode(nullptr) {}
+    Network::Network(): _oNode(nullptr) {}
     Network::~Network() {
 
     }
@@ -15,6 +18,12 @@ namespace paxosdb {
 
     void Network::stopNetworkThreads() {
 
+    }
+
+    void Network::onReceiveMessage(const char* message, const unsigned int message_size) {
+        if (_oNode != nullptr) {
+            _oNode->onReceiveMessage(message, message_size);
+        }
     }
 
 

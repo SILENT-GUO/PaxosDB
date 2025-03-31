@@ -3,3 +3,10 @@
 //
 
 #include "pnode.hpp"
+
+namespace paxosdb {
+    int PNode::onReceiveMessage(const char *message, size_t message_size) {
+
+    }
+
+}

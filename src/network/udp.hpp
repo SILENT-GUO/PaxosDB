@@ -6,12 +6,14 @@
 #define UDP_HPP
 
 #pragma once
-#include "concurrent.hpp"
+#include <atomic>
 #include <string>
 
-namespace paxosdb {
+#include "concurrent.hpp"
+#include "DFNetwork.hpp"
 
-class DFNetwork;
+
+namespace paxosdb {
 
 class UDPRecvMessage: public Thread {
 public:
@@ -19,15 +21,15 @@ public:
     ~UDPRecvMessage() override;
 
     // This udp accepts any client and port
-    int init(const int portNumber);
+    int init(int portNumber);
     void run() override;
     void stop();
 
 private:
     DFNetwork * _network;
     int _iSocketFD;
-    bool _isRunning;
-    bool _isStopped;
+    std::atomic<bool> _isRunning;
+    std::atomic<bool> _isStopped;
 
 };
 
