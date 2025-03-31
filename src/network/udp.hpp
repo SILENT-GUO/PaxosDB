@@ -26,6 +26,8 @@ public:
 private:
     DFNetwork * _network;
     int _iSocketFD;
+    bool _isRunning;
+    bool _isStopped;
 
 };
 

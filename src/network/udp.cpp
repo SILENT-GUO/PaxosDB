@@ -21,7 +21,20 @@ UDPRecvMessage::~UDPRecvMessage() {
 }
 
 void UDPRecvMessage::stop() {
-    
+    if (_isRunning) {
+        _isStopped = true;
+        _isRunning = false;
+        this->join();
+    }
 }
+
+int UDPRecvMessage::init(const int portNumber) {
+
+}
+
+void UDPRecvMessage::run() {
+
+}
+
 
 }
