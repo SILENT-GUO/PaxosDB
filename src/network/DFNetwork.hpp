@@ -8,10 +8,16 @@
 #pragma once
 
 #include <network.hpp>
+#include <string>
 
 namespace paxosdb {
 class DFNetwork: public Network{
+public:
+    DFNetwork();
+    virtual ~DFNetwork();
 
+    int init(const std::string & ip, const int port, const int numIOThreads);
+private:
 
 };
 }
