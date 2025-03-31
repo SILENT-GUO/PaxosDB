@@ -7,6 +7,7 @@
 
 #pragma once
 #include "concurrent.hpp"
+#include <string>
 
 namespace paxosdb {
 
