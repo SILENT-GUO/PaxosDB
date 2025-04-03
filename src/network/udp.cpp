@@ -5,6 +5,8 @@
 #include "udp.hpp"
 
 #include <cstring>
+#include <iostream>
+#include <ostream>
 #include <unistd.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -89,6 +91,67 @@ void UDPRecvMessage::run() {
         }
     }
     _isRunning = false;
+}
+
+////////////////////////////////////////////////////////////
+
+UDPSendMessage::UDPSendMessage(): _iSocketFD(-1), _isRunning(false), _isStopped(false) {
+
+}
+
+UDPSendMessage::~UDPSendMessage() {
+    while (!_queue.empty()) {
+        const QueueData * queueData = _queue.peek();
+        _queue.pop();
+        delete queueData;
+    }
+}
+
+int UDPSendMessage::init() {
+    if ((_iSocketFD = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
+        return -1;
+    }
+    return 0;
+}
+
+void UDPSendMessage::stop() {
+    if (_isRunning) {
+        _isStopped = true;
+        this->join();
+    }
+}
+
+void UDPSendMessage::sendMessage(const std::string &ip, int port, const std::string &message) {
+    struct sockaddr_in serverAddress;
+    int serverAddressLength = sizeof(serverAddress);
+    memset(&serverAddress, 0, sizeof(serverAddress));
+
+    serverAddress.sin_family = AF_INET;
+    serverAddress.sin_port = htons(port);
+    serverAddress.sin_addr.s_addr = inet_addr(ip.c_str());
+
+    int ret = sendto(_iSocketFD, message.c_str(), message.size(), 0, reinterpret_cast<sockaddr*>(&serverAddress), serverAddressLength);
+    if (ret < 0) {
+        std::cerr << "sendto error for UDP sendMessage: " << strerror(errno) << std::endl;
+    }
+}
+
+
+void UDPSendMessage::run() {
+    _isRunning = true;
+    while (true) {
+        const QueueData * pData = nullptr;
+        if (!_queue.empty()) {
+            pData = _queue.peek();
+        }
+        if (pData != nullptr) {
+            sendMessage(pData->ip, pData->port, pData->message);
+            delete pData;
+        }
+        if (_isStopped) {
+            return;
+        }
+    }
 }
 
 

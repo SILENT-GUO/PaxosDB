@@ -57,8 +57,10 @@ private:
     // send it in run function
     void sendMessage(const std::string & ip, int port, const std::string & message);
 
-    ConcurrentQueue<QueueData> _queue;
+    ConcurrentQueue<QueueData *> _queue;
     int _iSocketFD;
+    std::atomic<bool> _isRunning;
+    std::atomic<bool> _isStopped;
 
 };
 }
