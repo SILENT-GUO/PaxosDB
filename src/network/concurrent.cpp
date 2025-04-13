@@ -3,18 +3,28 @@
 //
 
 #include "concurrent.hpp"
-
-
-static void* threadRun(void* p) {
-    auto* thread = static_cast<paxosdb::Thread*>(p);
-    thread->run();
-    return nullptr;
-}
-
+#include <iostream>
 namespace paxosdb {
 
+Thread::~Thread() {
+    if (m_thread.joinable()) {
+        std::cout << "[DEBUG] Thread joining in base destructor" << std::endl;
+        m_thread.join();  // 或者 detach，但 join 更安全
+    }
+}
+
+
 void Thread::start() {
-    this->m_thread = std::thread([this] { return threadRun(this); });
+    _isStarted = false;
+    m_thread = std::thread([this] {
+        _isStarted = true;
+        run();
+    });
+
+    // 等待线程真正进入 run()
+    while (!_isStarted) {
+        std::this_thread::yield();
+    }
 }
 
 void Thread::join() {

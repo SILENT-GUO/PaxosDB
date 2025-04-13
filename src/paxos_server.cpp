@@ -10,6 +10,13 @@
 
 namespace paxos_echo {
 
+    PaxosServer::PaxosServer(const paxosdb::SingleNodeInfo &singleNode, const paxosdb::NodeInfoList &vecNodeList): oSingleNode(singleNode), oVecNodeList(vecNodeList), oPaxosNode(nullptr) {}
+
+    PaxosServer::~PaxosServer() {
+        delete oPaxosNode;
+    }
+
+
     int PaxosServer::RunPaxosServer() {
         // init each variables in server as an option instance.
         paxosdb::Options options;

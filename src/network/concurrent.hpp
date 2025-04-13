@@ -11,6 +11,7 @@
 #include <thread>
 
 #include "NonCopyable.hpp"
+#include <atomic>
 
 
 namespace paxosdb {
@@ -19,7 +20,7 @@ class Thread: public NonCopyable {
     // this class will be mostly a re-implementation of std::thread.
 public:
     Thread() = default;
-    virtual ~Thread() = default;
+    virtual ~Thread();
     void start(); // this function directly call run() method. Similar to the node / pnode scenerio, user can directly use Thread.start() to implement alternative run methods
     void join();
     void detach();
@@ -30,6 +31,7 @@ public:
     static void sleep(int ms);
 private:
     std::thread m_thread;
+    std::atomic<bool> _isStarted = false;
 };
 
 template<class T>
@@ -76,6 +78,8 @@ public:
         std::unique_lock<std::mutex> lock(_lock);
         return _size;
     }
+
+    static constexpr int kMaxElementsInQueue = std::numeric_limits<int>::max();
 private:
     size_t _size;
     std::condition_variable_any _cond;

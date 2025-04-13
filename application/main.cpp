@@ -4,8 +4,13 @@
 #include <cstring>
 #include <iostream>
 #include "node.hpp"
+#include "paxos_server.hpp"
+#include <thread>   // for sleep
+#include <chrono>   // for sleep
+#include <atomic>
 
 using namespace paxosdb;
+using namespace paxos_echo;
 
 std::pair<std::string, int> parseIpPort(const std::string& input) {
     const size_t pos = input.find(':');
@@ -70,7 +75,41 @@ int main (const int argc, const char * argv[]) {
         std::cout << node.GetNodeID() << " " << node.GetNodeIPAddress() << " " << node.GetNodePort() << std::endl;
     }
 
+    PaxosServer paxosServer(currentNode, vecNodeList);
+    int ret = paxosServer.RunPaxosServer();
+    if (ret != 0) {
+        std::cerr << "paxosdb::Node::RunNode failed" << std::endl;
+        return ret;
+    }
 
+    std::cout << "Initialization complete" << std::endl;
+    std::cout << "Go to echo stage" << std::endl;
+
+    std::cout << "Press 'q' + Enter to quit." << std::endl;
+
+    // 👇 用于判断是否退出
+    std::atomic<bool> shouldExit{false};
+
+    // 👇 启动一个输入检测线程
+    std::thread inputThread([&shouldExit]() {
+        char c;
+        while (std::cin >> c) {
+            if (c == 'q' || c == 'Q') {
+                shouldExit = true;
+                break;
+            }
+        }
+    });
+
+    // 👇 主线程循环
+    while (!shouldExit) {
+        std::this_thread::sleep_for(std::chrono::seconds(1));
+    }
+
+    std::cout << "Quitting... cleaning up." << std::endl;
+
+    inputThread.join(); // 👈 等待输入线程退出
+    return 0;
 
 
 }

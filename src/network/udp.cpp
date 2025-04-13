@@ -3,6 +3,7 @@
 //
 
 #include "udp.hpp"
+#include "DFNetwork.hpp"
 
 #include <cstring>
 #include <iostream>
@@ -12,6 +13,7 @@
 #include <netinet/in.h>
 #include <poll.h>
 #include <arpa/inet.h>
+
 
 namespace paxosdb {
 
@@ -28,11 +30,14 @@ UDPRecvMessage::~UDPRecvMessage() {
 }
 
 void UDPRecvMessage::stop() {
+    std::cout << "[DEBUG] UDPRecvMessage stopping\n";
     if (_isRunning) {
         _isStopped = true;
-        this->join();
+        this->join();  // ✅ join 确保线程退出前不析构
     }
+    std::cout << "[DEBUG] UDPRecvMessage stopped\n";
 }
+
 
 // invalid : return -1; normal: return 0;
 // config socket connection
@@ -58,6 +63,7 @@ int UDPRecvMessage::init(const int portNumber) {
 }
 
 void UDPRecvMessage::run() {
+    std::cout << "[DEBUG] UDPRecvMessage::run started\n";
     _isRunning = true;
     sockaddr_in serverAddress{};
     socklen_t serverAddressLength = sizeof(serverAddress);
@@ -91,6 +97,7 @@ void UDPRecvMessage::run() {
         }
     }
     _isRunning = false;
+    std::cout << "[DEBUG] UDPRecvMessage::run exited\n";
 }
 
 ////////////////////////////////////////////////////////////
@@ -153,6 +160,20 @@ void UDPSendMessage::run() {
         }
     }
 }
+
+int UDPSendMessage::AddMessage(const std::string &ip, int port, const std::string &message) {
+    if (_queue.size() >= paxosdb::ConcurrentQueue<paxosdb::UDPSendMessage::QueueData *>::kMaxElementsInQueue) {
+        return -2;
+    }
+    QueueData * newQueueData = new QueueData();
+    newQueueData->ip = ip;
+    newQueueData->port = port;
+    newQueueData->message = message;
+    _queue.push(newQueueData);
+
+    return 0;
+}
+
 
 
 }

@@ -10,10 +10,10 @@
 #include <string>
 
 #include "concurrent.hpp"
-#include "DFNetwork.hpp"
-
 
 namespace paxosdb {
+
+class DFNetwork;
 
 class UDPRecvMessage: public Thread {
 public:
